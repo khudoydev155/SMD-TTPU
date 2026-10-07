@@ -1,3 +1,38 @@
+/*
+ * 15-VAZIFA: bitta harakat ("yurak" bosilishi) barcha qatlamlar bo'ylab
+ *
+ * (1) CHAQIRUVLAR TARTIBI (boshqaruv oqimi: bosish ICHKARIGA boradi):
+ *     1. UI (taqdimot)          MovieItem: yurak IconButton'i bosiladi
+ *     2. ViewModel (taqdimot)   MovieListViewModel.onFavoriteClick(movieId)
+ *     3. Use case (domen)       ToggleFavoriteUseCase.invoke(movieId)
+ *     4. Repository (data)      MovieRepositoryImpl.toggleFavorite(movieId)
+ *     5. Ma'lumot manbai (data) SharedPrefsMovieLocalDataSource.setFavorite(id, favorite)
+ *     Javob (yangi isFavorite qiymati) teskari yo'nalishda TASHQARIGA qaytadi: manba -> repository ->
+ *     use case -> ViewModel holatni yangilaydi (StateFlow) -> UI qayta chiziladi.
+ *
+ * (2) MANBA-KOD BOG'LIQLIKLARI (o'q "kim kimni import qiladi/amalga oshiradi"):
+ *     MovieItem          - ViewModel'ni IMPORT QILMAYDI: faqat onFavoriteClick lambdasini oladi;
+ *                          ularni MainActivity (composition root) ulaydi.
+ *     MovieListViewModel --> ToggleFavoriteUseCase                 (taqdimot -> domen: ichkariga)
+ *     ToggleFavoriteUseCase --> MovieRepository (interfeys)        (domen ichida)
+ *     MovieRepositoryImpl --> MovieRepository (interfeys)          (data -> domen: ichkariga)
+ *     MovieRepositoryImpl --> MovieLocalDataSource (interfeys)     (data ichida)
+ *     SharedPrefsMovieLocalDataSource --> MovieLocalDataSource     (data ichida)
+ *     CHAQIRUVGA TESKARI o'q: runtime'da use case MovieRepositoryImpl'ni chaqiradi (ichkaridan
+ *     tashqariga), lekin manba-kodda o'q MovieRepositoryImpl'dan domendagi MovieRepository
+ *     interfeysiga qaraydi. Sababi - Dependency Inversion: interfeys domenga tegishli, shuning
+ *     uchun domen ma'lumotlar qatlamini bilmaydi, aksincha, data domenga bog'lanadi.
+ *     (Chaqiruv yo'nalishi va bog'liqlik yo'nalishi bir xil bo'lishi shart emas.)
+ *
+ * (3) NIMA UCHUN use case Log.d'ni chaqira olmaydi va domendan loglashning toza usuli:
+ *     Domen sof Kotlin moduli: uning classpath'ida Android yo'q, android.util.Log mavjud emas
+ *     (import qizaradi) va Dependency Rule domenni Android kabi tashqi tafsilotlardan mustaqil
+ *     saqlashni talab qiladi. Toza usul - yana Dependency Inversion: domenda
+ *     `interface Logger { fun d(tag: String, message: String) }` e'lon qilinadi, use case uni
+ *     konstruktor orqali oladi; tashqi qatlamda (app) `AndroidLogger : Logger` Log.d bilan
+ *     amalga oshiriladi va composition root (AppContainer) use case'ga uzatadi. Testda esa
+ *     soxta Logger berish mumkin.
+ */
 package uz.ttpu.movieshelf.presentation.movies
 
 import androidx.lifecycle.ViewModel
