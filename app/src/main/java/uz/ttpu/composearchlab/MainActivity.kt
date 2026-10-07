@@ -13,7 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -35,7 +35,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun NameScreen(modifier: Modifier = Modifier) {
-    var name by remember { mutableStateOf("") }
+    // rememberSaveable holatni Bundle'ga yozadi, shuning uchun Activity aylantirishda qayta yaratilsa ham matn tiklanadi; remember esa faqat kompozitsiya xotirasida turadi va Activity bilan birga yo'qoladi.
+    var name by rememberSaveable { mutableStateOf("") }
 
     Column(modifier.padding(24.dp)) {
         OutlinedTextField(
