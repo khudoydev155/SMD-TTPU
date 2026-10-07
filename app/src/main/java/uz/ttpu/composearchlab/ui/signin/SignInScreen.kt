@@ -41,10 +41,13 @@ fun SignInRoute(viewModel: SignInViewModel = viewModel()) {
     // konfiguratsiya o'zgarishidan omon qoladi va Error holatini saqlab turadi, yangidan yaratilgan
     // kompozitsiya esa LaunchedEffect'ni (uiState Error bo'lgani uchun) yana ishga tushiradi.
     // Snackbar bir martalik effekt, holat esa doimiy - ular o'rtasidagi nomuvofiqlik xatoga olib keladi.
-    // Tuzatish 9-vazifada: "Snackbar ko'rsatildi" hodisasi bilan Error holatini iste'mol qilamiz.
+    // TUZATISH (9-vazifa): showSnackbar qaytgach viewModel.onErrorShown() chaqiriladi va Error holati
+    // tiklanadi, shuning uchun aylantirishdan keyin effekt qayta ishga tushmaydi.
     LaunchedEffect(uiState) {
         if (uiState is SignInUiState.Error) {
             snackbarHostState.showSnackbar(uiState.message)
+            // showSnackbar Snackbar yo'qolgandan keyin qaytadi: hodisa iste'mol qilindi.
+            viewModel.onErrorShown()
         }
     }
 

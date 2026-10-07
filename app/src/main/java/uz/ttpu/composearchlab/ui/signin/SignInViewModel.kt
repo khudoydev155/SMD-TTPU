@@ -35,4 +35,12 @@ class SignInViewModel : ViewModel() {
             }
         }
     }
+
+    // 9-vazifa: "Snackbar ko'rsatildi" ham hodisa. UI buni xabar qilganda ViewModel Error holatini
+    // SignedOut'ga qaytaradi, shunda xabar aynan bir marta ko'rinadi (iste'mol qilingan hodisa).
+    fun onErrorShown() {
+        if (_uiState.value is SignInUiState.Error) {
+            _uiState.value = SignInUiState.SignedOut
+        }
+    }
 }
