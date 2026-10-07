@@ -12,10 +12,14 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -31,8 +35,22 @@ import uz.ttpu.composearchlab.ui.theme.ComposeArchLabTheme
 @Composable
 fun SignInRoute(viewModel: SignInViewModel = viewModel()) {
     val uiState = viewModel.uiState.value
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    Scaffold { innerPadding ->
+    // IZOH (8-vazifa): aylantirishdan keyin AYNAN O'SHA Snackbar yana paydo bo'ladi. Sabab: ViewModel
+    // konfiguratsiya o'zgarishidan omon qoladi va Error holatini saqlab turadi, yangidan yaratilgan
+    // kompozitsiya esa LaunchedEffect'ni (uiState Error bo'lgani uchun) yana ishga tushiradi.
+    // Snackbar bir martalik effekt, holat esa doimiy - ular o'rtasidagi nomuvofiqlik xatoga olib keladi.
+    // Tuzatish 9-vazifada: "Snackbar ko'rsatildi" hodisasi bilan Error holatini iste'mol qilamiz.
+    LaunchedEffect(uiState) {
+        if (uiState is SignInUiState.Error) {
+            snackbarHostState.showSnackbar(uiState.message)
+        }
+    }
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+    ) { innerPadding ->
         SignInScreen(
             uiState = uiState,
             onSignIn = viewModel::onSignIn,
