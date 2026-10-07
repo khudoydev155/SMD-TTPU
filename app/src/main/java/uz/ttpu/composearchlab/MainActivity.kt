@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import uz.ttpu.composearchlab.ui.signin.SignInRoute
 import uz.ttpu.composearchlab.ui.theme.ComposeArchLabTheme
 
 class MainActivity : ComponentActivity() {
@@ -26,9 +27,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ComposeArchLabTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NewsScreen(modifier = Modifier.padding(innerPadding))
-                }
+                SignInRoute()
             }
         }
     }
