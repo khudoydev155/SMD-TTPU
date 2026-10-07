@@ -1,5 +1,6 @@
 package uz.ttpu.composearchlab.ui.taste
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -15,5 +16,8 @@ fun TastePickerRoute(viewModel: TastePickerViewModel = viewModel()) {
         state = state,
         onGenreClick = viewModel::onGenreClick,
         onLikeClick = viewModel::onArtistLikeToggled,
+        // Navigatsiya keyingi laboratoriyada qo'shiladi; hozircha faqat log.
+        onContinueClick = { Log.d("TastePicker", "Continue clicked, liked=${state.likedIds}") },
+        onSkipClick = { Log.d("TastePicker", "Later clicked") },
     )
 }

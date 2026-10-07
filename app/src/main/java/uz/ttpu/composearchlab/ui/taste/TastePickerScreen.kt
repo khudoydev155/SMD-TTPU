@@ -15,9 +15,22 @@ fun TastePickerScreen(
     state: TastePickerState,
     onGenreClick: (String) -> Unit,
     onLikeClick: (Int) -> Unit,
+    onContinueClick: () -> Unit,
+    onSkipClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Scaffold(modifier = modifier) { innerPadding ->
+    Scaffold(
+        modifier = modifier,
+        bottomBar = {
+            TastePickerBottomBar(
+                likedCount = state.likedCount,
+                required = REQUIRED_LIKES,
+                canContinue = state.canContinue,
+                onContinueClick = onContinueClick,
+                onSkipClick = onSkipClick,
+            )
+        },
+    ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             GenreChips(
                 genres = state.genres,
@@ -43,6 +56,8 @@ private fun TastePickerScreenPreview() {
             state = TastePickerState(artists = seedArtists, likedIds = setOf(1, 2)),
             onGenreClick = {},
             onLikeClick = {},
+            onContinueClick = {},
+            onSkipClick = {},
         )
     }
 }
