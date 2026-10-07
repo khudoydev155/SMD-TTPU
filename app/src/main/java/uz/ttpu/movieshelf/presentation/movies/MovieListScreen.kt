@@ -16,6 +16,8 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -34,11 +36,13 @@ import uz.ttpu.movieshelf.ui.theme.MovieShelfTheme
 
 // Holatsiz ekran: holatning funksiyasi, shuning uchun to'rttala vaziyatni ilovani ishga tushirmasdan
 // preview'da ko'rish mumkin.
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieListScreen(
     state: MovieListUiState,
     onFavoriteClick: (Int) -> Unit,
     onRefresh: () -> Unit,
+    onFavoritesOnlyChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (state) {
@@ -68,8 +72,14 @@ fun MovieListScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.End,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
+                FilterChip(
+                    selected = state.favoritesOnly,
+                    onClick = { onFavoritesOnlyChange(!state.favoritesOnly) },
+                    label = { Text("Favorites only") },
+                )
                 TextButton(onClick = onRefresh) {
                     Text("Refresh")
                 }
@@ -86,12 +96,18 @@ fun MovieListScreen(
                     )
                 }
             }
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(state.movies, key = { it.id }) { movie ->
-                    MovieItem(
-                        movie = movie,
-                        onFavoriteClick = { onFavoriteClick(movie.id) },
-                    )
+            if (state.movies.isEmpty()) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("No favorite movies yet")
+                }
+            } else {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(state.movies, key = { it.id }) { movie ->
+                        MovieItem(
+                            movie = movie,
+                            onFavoriteClick = { onFavoriteClick(movie.id) },
+                        )
+                    }
                 }
             }
         }
@@ -144,7 +160,7 @@ private val previewMovies = listOf(
 @Composable
 private fun MovieListLoadingPreview() {
     MovieShelfTheme {
-        MovieListScreen(MovieListUiState.Loading, onFavoriteClick = {}, onRefresh = {})
+        MovieListScreen(MovieListUiState.Loading, onFavoriteClick = {}, onRefresh = {}, onFavoritesOnlyChange = {})
     }
 }
 
@@ -156,6 +172,7 @@ private fun MovieListSuccessPreview() {
             MovieListUiState.Success(previewMovies, isFromCache = false),
             onFavoriteClick = {},
             onRefresh = {},
+            onFavoritesOnlyChange = {},
         )
     }
 }
@@ -168,6 +185,7 @@ private fun MovieListCachedPreview() {
             MovieListUiState.Success(previewMovies, isFromCache = true),
             onFavoriteClick = {},
             onRefresh = {},
+            onFavoritesOnlyChange = {},
         )
     }
 }
@@ -180,6 +198,7 @@ private fun MovieListErrorPreview() {
             MovieListUiState.Error("Can't load movies. Check your connection and try again."),
             onFavoriteClick = {},
             onRefresh = {},
+            onFavoritesOnlyChange = {},
         )
     }
 }

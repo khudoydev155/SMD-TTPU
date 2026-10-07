@@ -39,6 +39,7 @@ class MainActivity : ComponentActivity() {
                         initializer {
                             MovieListViewModel(
                                 container.getMovies,
+                                container.getFavoriteMovies,
                                 container.toggleFavorite,
                             )
                         }
@@ -67,6 +68,7 @@ class MainActivity : ComponentActivity() {
                             state = state,
                             onFavoriteClick = viewModel::onFavoriteClick,
                             onRefresh = viewModel::onRefresh,
+                            onFavoritesOnlyChange = viewModel::onFavoritesOnlyChange,
                         )
                     }
                 }
