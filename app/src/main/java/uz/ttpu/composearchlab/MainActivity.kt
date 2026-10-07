@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ComposeArchLabTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NameScreen(modifier = Modifier.padding(innerPadding))
+                    NewsScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
