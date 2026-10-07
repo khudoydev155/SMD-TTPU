@@ -18,7 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import uz.ttpu.composearchlab.ui.signin.SignInRoute
+import uz.ttpu.composearchlab.ui.taste.TastePickerRoute
 import uz.ttpu.composearchlab.ui.theme.ComposeArchLabTheme
 
 class MainActivity : ComponentActivity() {
@@ -27,7 +27,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ComposeArchLabTheme {
-                SignInRoute()
+                // Hozirgi ekran: Taste Picker (C qism). Boshqa vazifalarni sinash uchun shu yerda almashtiring:
+                //   2-3-vazifa: Scaffold { NameScreen(Modifier.padding(it)) }
+                //   4-vazifa:   Scaffold { NewsScreen(Modifier.padding(it)) }
+                //   5-9-vazifa: SignInRoute()
+                TastePickerRoute()
             }
         }
     }
