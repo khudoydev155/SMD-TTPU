@@ -161,7 +161,20 @@ fun q15() = runBlocking {
     println("All done")
 }
 
-fun main() {
-    println("=== Q1 ==="); q1()
-    println("=== Q15 ==="); q15()
+fun main() = runBlocking {
+    println("--- Question 1 ---"); q1()
+    println("\n--- Question 2 (Delay) ---"); q2Delay()
+    println("\n--- Question 2 (Sleep) ---"); q2Sleep()
+    println("\n--- Question 3 ---"); q3()
+    println("\n--- Question 5 ---"); q5()
+    println("\n--- Question 6 ---"); q6()
+    println("\n--- Question 7 ---"); q7()
+    println("\n--- Question 8 ---"); q8()
+    println("\n--- Question 9 ---"); q9()
+    println("\n--- Question 10 ---"); q10()
+    println("\n--- Question 11 ---"); q11()
+    println("\n--- Question 12 ---"); q12()
+    println("\n--- Question 13 ---"); q13()
+    println("\n--- Question 14 ---"); q14()
+    println("\n--- Question 15 ---"); q15()
 }
